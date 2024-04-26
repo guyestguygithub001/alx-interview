@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from typing import List
 
+
 def pascal_triangle(n: int) -> List[list]:
     '''
    Generates Pascal's triangle up to the nth row
