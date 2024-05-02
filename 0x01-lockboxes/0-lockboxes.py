@@ -1,3 +1,8 @@
+#!/usr/bin/python3
+''' module to working with lockboxes and its components
+'''
+
+
 def canUnlockAll(boxes):
     '''
     Checks if all the boxes in a list of boxes containing the keys
