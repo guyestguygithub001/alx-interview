@@ -1,29 +1,34 @@
 #!/usr/bin/python3
-# This script generates random HTTP request logs.
-
+'''
+This script is designed to generate random HTTP request logs.
+'''
 import random
 import sys
 import datetime
 from time import sleep
 
-# Generate 10,000 logs.
+# The script will generate 10,000 logs
 for i in range(10000):
-    # Pause for a random amount of time.
+    # Introduce a random delay between each log
     sleep(random.random())
-
-    # Write a log entry to standard output.
+    # Write a formatted log entry to stdout
     sys.stdout.write("{:d}.{:d}.{:d}.{:d} - [{}] \"GET {} {}\" {} {}\n".format(
-        random.randint(1, 255),  # Random IP address.
+        # Generate a random IP address
         random.randint(1, 255),
         random.randint(1, 255),
         random.randint(1, 255),
-        datetime.datetime.now(),  # Current date and time.
-        '/projects/1216',  # Requested URL.
-        'HTTP/1.1',  # HTTP version.
-        random.choice([200, 301, 400, 401, 403, 404, 405, 500]),  # Random status code.
-        random.randint(1, 1024)  # Random file size.
+        random.randint(1, 255),
+        # Use the current date and time
+        datetime.datetime.now(),
+        # Use a fixed request path
+        '/projects/1216',
+        # Use a fixed HTTP version
+        'HTTP/1.1',
+        # Randomly select a status code
+        random.choice([200, 301, 400, 401, 403, 404, 405, 500]),
+        # Randomly generate a file size
+        random.randint(1, 1024)
     ))
-
-    # Flush the output buffer to ensure the log entry is written immediately.
+    # Ensure the log entry is immediately written to stdout
     sys.stdout.flush()
 
