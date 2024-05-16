@@ -1,36 +1,35 @@
 #!/usr/bin/python3
+import re
 import sys
-import signal
 
-def print_stats(status_codes, file_size):
-    print("File size: {}".format(file_size))
-    for code in sorted(status_codes.keys()):
-        if status_codes[code] != 0:
-            print("{}: {}".format(code, status_codes[code]))
+total_size = 0
+status_codes = {
+    200: 0, 301: 0, 400: 0, 401: 0,
+    403: 0, 404: 0, 405: 0, 500: 0
+}
 
-def signal_handler(sig, frame):
-    print_stats(status_codes, file_size)
-    sys.exit(0)
-
-status_codes = {"200": 0, "301": 0, "400": 0, "401": 0, "403": 0, "404": 0, "405": 0, "500": 0}
-file_size = 0
-
-signal.signal(signal.SIGINT, signal_handler)
+line_count = 0
 
 try:
-    for i, line in enumerate(sys.stdin, 1):
-        try:
-            parts = line.split()
-            size = int(parts[-1])
-            code = parts[-2]
-            if code in status_codes:
-                status_codes[code] += 1
-            file_size += size
-        except:
-            pass
-        if i % 10 == 0:
-            print_stats(status_codes, file_size)
+    for line in sys.stdin:
+        line_count += 1
+        log_pattern = r'^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3} - \[.*?\] "GET \/projects\/260 HTTP\/1.1" (\d+) (\d+)$'
+        match = re.match(log_pattern, line)
+        if match:
+            status_code = int(match.group(1))
+            file_size = int(match.group(2))
+            total_size += file_size
+            if status_code in status_codes:
+                status_codes[status_code] += 1
+
+        if line_count % 10 == 0:
+            print("File size: {}".format(total_size))
+            for code, count in sorted(status_codes.items()):
+                if count > 0:
+                    print("{}: {}".format(code, count))
+
 except KeyboardInterrupt:
-    pass
-finally:
-    print_stats(status_codes, file_size)
+    print("File size: {}".format(total_size))
+    for code, count in sorted(status_codes.items()):
+        if count > 0:
+            print("{}: {}".format(code, count))
