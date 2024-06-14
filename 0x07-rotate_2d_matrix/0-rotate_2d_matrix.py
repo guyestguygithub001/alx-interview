@@ -32,4 +32,3 @@ def rotate_2d_matrix(matrix):
             matrix[last][last - offset] = matrix[i][last]
             # Move the saved top element to the right.
             matrix[i][last] = top
-
