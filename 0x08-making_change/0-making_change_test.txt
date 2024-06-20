@@ -1,0 +1,5 @@
+#!/usr/bin/env fish
+# Run the doctest module with verbose output for the current script file.
+python3 -m doctest -v (basename (status -f))
+# Exit the script.
+exit
